@@ -1,0 +1,107 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius: 1rem;
+}
+
+:root {
+  --background: oklch(0.12 0.01 250);
+  --foreground: oklch(0.98 0.01 250);
+  --card: oklch(0.15 0.01 250 / 80%);
+  --card-foreground: oklch(0.98 0.01 250);
+  --popover: oklch(0.15 0.01 250);
+  --popover-foreground: oklch(0.98 0.01 250);
+  --primary: oklch(0.82 0.21 145); /* Verde neon do Acué */
+  --primary-foreground: oklch(0.12 0.01 250);
+  --secondary: oklch(0.22 0.02 250);
+  --secondary-foreground: oklch(0.9 0.02 250);
+  --muted: oklch(0.18 0.01 250);
+  --muted-foreground: oklch(0.7 0.01 250);
+  --accent: oklch(0.82 0.21 145 / 15%);
+  --accent-foreground: oklch(0.82 0.21 145);
+  --destructive: oklch(0.57 0.21 25);
+  --destructive-foreground: oklch(0.98 0.01 250);
+  --border: oklch(0.25 0.01 250 / 40%);
+  --input: oklch(0.2 0.01 250 / 40%);
+  --ring: oklch(0.82 0.21 145);
+}
+
+@layer base {
+  * {
+    @apply border-border/40 outline-ring/50;
+  }
+  body {
+    @apply bg-[#0B0C0E] text-white font-sans antialiased selection:bg-[#00E676]/20 selection:text-[#00E676];
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Sora', sans-serif;
+  }
+}
+
+/* Custom glow and glassmorphism utilities */
+.glow-green {
+  box-shadow: 0 0 40px -10px rgba(0, 230, 118, 0.25);
+}
+
+.glow-purple {
+  box-shadow: 0 0 40px -10px rgba(142, 36, 170, 0.25);
+}
+
+.glass-card {
+  background: rgba(17, 18, 21, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(0, 230, 118, 0.3);
+  box-shadow: 0 0 30px -5px rgba(0, 230, 118, 0.15);
+  transform: translateY(-4px);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0C0E;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #22252A;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00E676;
+}
