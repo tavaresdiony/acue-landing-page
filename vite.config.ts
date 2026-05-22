@@ -9,13 +9,14 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client/src"),
-      "@shared": path.resolve(__dirname, "../shared"),
+      "@shared": path.resolve(__dirname, "./shared"),
     },
   },
   root: path.resolve(__dirname, "./client"),
   build: {
-    // Usando o caminho absoluto para a raiz do repositório
-    outDir: path.resolve(__dirname, "../dist"),
+    // Usamos um caminho relativo limpo. Como a raiz (root) é ./client,
+    // colocar ../dist vai salvar a pasta 'dist' exatamente na raiz do repositório!
+    outDir: "../dist",
     emptyOutDir: true,
   },
 });
