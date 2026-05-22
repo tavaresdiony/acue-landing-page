@@ -14,8 +14,8 @@ export default defineConfig({
   },
   root: path.resolve(__dirname, "./client"),
   build: {
-    // Usamos path.resolve para garantir o caminho absoluto correto para a raiz do repositório
-    outDir: path.resolve(__dirname, "dist"),
+    // Usando o caminho absoluto para a raiz do repositório
+    outDir: path.resolve(__dirname, "../dist"),
     emptyOutDir: true,
   },
 });
