@@ -6,7 +6,8 @@ import posthog from "posthog-js";
 posthog.init(
   "phc_CEdbVrcP8cEuWMAZMsCfnUJuZvSugKnYxgqARA25XrPs",
   {
-    api_host: "https://app.posthog.com",
+    api_host: "/ingest",
+    ui_host: "https://us.posthog.com",
     capture_pageview: true,
     capture_pageleave: true,
     autocapture: true,
