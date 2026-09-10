@@ -435,7 +435,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-4xl font-extrabold font-sora">
-                    R$ 14,90
+                    R$ 19,90
                   </span>
                   <span className="text-xs text-gray-500">/ mês</span>
                 </div>
