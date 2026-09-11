@@ -10,6 +10,11 @@
       "source": "/x",
       "destination": "/?utm_source=x&utm_medium=bio",
       "permanent": false
+    },
+    {
+      "source": "/dv",
+      "destination": "/?utm_source=divulgacao&utm_medium=grupo",
+      "permanent": false
     }
   ],
   "rewrites": [
