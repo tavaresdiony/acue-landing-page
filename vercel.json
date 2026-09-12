@@ -15,6 +15,11 @@
       "source": "/dv",
       "destination": "/?utm_source=divulgacao&utm_medium=grupo",
       "permanent": false
+    },
+    {
+      "source": "/ads",
+      "destination": "/?utm_source=meta_ads&utm_medium=paid",
+      "permanent": false
     }
   ],
   "rewrites": [
