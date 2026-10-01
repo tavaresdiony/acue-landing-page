@@ -5,6 +5,21 @@
       "source": "/ig",
       "destination": "/?utm_source=instagram&utm_medium=bio",
       "permanent": false
+    },
+    {
+      "source": "/x",
+      "destination": "/?utm_source=x&utm_medium=bio",
+      "permanent": false
+    },
+    {
+      "source": "/dv",
+      "destination": "/?utm_source=divulgacao&utm_medium=grupo",
+      "permanent": false
+    },
+    {
+      "source": "/ads",
+      "destination": "/?utm_source=meta_ads&utm_medium=paid",
+      "permanent": false
     }
   ],
   "rewrites": [

@@ -11,6 +11,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
 
+    <!-- Tela de carregamento estática: usa só HTML/CSS inline (não depende do
+    bundle JS nem da fonte externa), pra nunca deixar a tela em branco/preta
+    sem explicação numa conexão lenta. O React substitui isso assim que monta. -->
+    <style>
+      #root{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0B0C0E}
+      .acue-boot{display:flex;flex-direction:column;align-items:center;gap:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+      .acue-boot__ring{width:36px;height:36px;border-radius:50%;border:3px solid #22252A;border-top-color:#00E676;animation:acue-spin .8s linear infinite}
+      .acue-boot__label{color:#8b93a1;font-size:13px;letter-spacing:.02em}
+      @keyframes acue-spin{to{transform:rotate(360deg)}}
+    </style>
+
     <!-- Meta Pixel Code -->
     <script>
       !function(f,b,e,v,n,t,s)
@@ -24,14 +35,16 @@
       fbq('init', '28904419625826250');
       fbq('track', 'PageView');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=28904419625826250&ev=PageView&noscript=1"
-    /></noscript>
     <!-- End Meta Pixel Code -->
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root"><div class="acue-boot"><div class="acue-boot__ring"></div><div class="acue-boot__label">Carregando o Acué…</div></div></div>
+    <!-- <noscript> com <img> não é permitido dentro de <head> pelo HTML spec
+    (o Vite acusa isso no build) — o pixel de fallback sem JS vive aqui. -->
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=28904419625826250&ev=PageView&noscript=1"
+    /></noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 
