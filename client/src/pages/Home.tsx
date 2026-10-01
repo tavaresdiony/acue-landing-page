@@ -10,6 +10,16 @@ import { toast } from 'sonner';
 import AcueDashboardMockup from '@/components/AcueDashboardMockup';
 import AcueLogo from '@/components/AcueLogo';
 
+declare global {
+  interface Window {
+    fbq?: (...args: any[]) => void;
+  }
+}
+
+function trackAppClick() {
+  window.fbq?.('track', 'Lead');
+}
+
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -63,10 +73,11 @@ export default function Home() {
           </nav>
           
           <div className="flex items-center gap-4">
-            <a 
-              href="https://www.acueapp.com.br" 
+            <a
+              href="https://www.acueapp.com.br"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={trackAppClick}
               className="text-xs md:text-sm font-bold bg-[#00E676] hover:bg-[#00C864] text-black px-5 py-2 rounded-full shadow-[0_0_20px_rgba(0,230,118,0.25)] hover:shadow-[0_0_25px_rgba(0,230,118,0.4)] transition-all active:scale-[0.97]"
             >
               Crie sua conta
@@ -138,10 +149,11 @@ export default function Home() {
 
               {/* Download CTA Button */}
               <div className="pt-2 max-w-md">
-                <a 
+                <a
                   href="https://www.acueapp.com.br"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={trackAppClick}
                   className="inline-flex bg-[#00E676] hover:bg-[#00C864] text-black font-extrabold text-base py-3.5 px-8 rounded-full items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,230,118,0.3)] active:scale-[0.97]"
                 >
                   <span>Acessar o Aplicativo</span>
@@ -413,10 +425,11 @@ export default function Home() {
                   </li>
                 </ul>
               </div>
-              <a 
+              <a
                 href="https://www.acueapp.com.br"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={trackAppClick}
                 className="mt-8 w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs py-3 rounded-xl transition-all text-center"
               >
                 Começar de graça
@@ -463,10 +476,11 @@ export default function Home() {
                   </li>
                 </ul>
               </div>
-              <a 
+              <a
                 href="https://www.acueapp.com.br"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={trackAppClick}
                 className="mt-8 w-full bg-[#00E676] hover:bg-[#00C864] text-black font-extrabold text-xs py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(0,230,118,0.2)] text-center"
               >
                 Garantir Acesso PRO
@@ -536,10 +550,11 @@ export default function Home() {
               </p>
 
               <div className="max-w-md mx-auto pt-4">
-                <a 
+                <a
                   href="https://www.acueapp.com.br"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={trackAppClick}
                   className="inline-flex bg-[#00E676] hover:bg-[#00C864] text-black font-extrabold text-base py-3.5 px-8 rounded-full items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,230,118,0.3)] active:scale-[0.97]"
                 >
                   <span>Crie sua conta no Acué</span>
