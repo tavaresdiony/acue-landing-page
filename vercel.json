@@ -19,6 +19,16 @@
       "source": "/ads",
       "destination": "/?utm_source=meta_ads&utm_medium=paid",
       "permanent": false
+    },
+    {
+      "source": "/yt",
+      "destination": "/?utm_source=youtube&utm_medium=bio",
+      "permanent": false
+    },
+    {
+      "source": "/yt-app",
+      "destination": "https://www.acueapp.com.br/?cadastro=1&utm_source=youtube&utm_medium=bio_app",
+      "permanent": false
     }
   ],
   "rewrites": [
