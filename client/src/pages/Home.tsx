@@ -74,7 +74,7 @@ export default function Home() {
           
           <div className="flex items-center gap-4">
             <a
-              href="https://www.acueapp.com.br"
+              href="https://www.acueapp.com.br/?cadastro=1"
               target="_blank"
               rel="noopener noreferrer"
               onClick={trackAppClick}
@@ -150,16 +150,19 @@ export default function Home() {
               {/* Download CTA Button */}
               <div className="pt-2 max-w-md">
                 <a
-                  href="https://www.acueapp.com.br"
+                  href="https://www.acueapp.com.br/?cadastro=1"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={trackAppClick}
                   className="inline-flex bg-[#00E676] hover:bg-[#00C864] text-black font-extrabold text-base py-3.5 px-8 rounded-full items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,230,118,0.3)] active:scale-[0.97]"
                 >
-                  <span>Acessar o Aplicativo</span>
+                  <span>Criar conta grátis</span>
                   <ArrowRight size={18} />
                 </a>
-                <p className="text-[11px] text-gray-500 mt-3 px-4 leading-relaxed">
+                <p className="text-xs text-gray-400 mt-3 px-4 leading-relaxed">
+                  Você vai direto para o cadastro. Leva menos de 1 minuto e não precisa de cartão.
+                </p>
+                <p className="text-[11px] text-gray-500 mt-2 px-4 leading-relaxed">
                   📱 O Acué é um <strong>PWA (Web App Progressivo)</strong>. Acesse direto pelo navegador e adicione à sua tela inicial como um aplicativo super leve, sem precisar baixar nada nas lojas!
                 </p>
               </div>
@@ -426,7 +429,7 @@ export default function Home() {
                 </ul>
               </div>
               <a
-                href="https://www.acueapp.com.br"
+                href="https://www.acueapp.com.br/?cadastro=1"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={trackAppClick}
@@ -477,7 +480,7 @@ export default function Home() {
                 </ul>
               </div>
               <a
-                href="https://www.acueapp.com.br"
+                href="https://www.acueapp.com.br/?cadastro=1"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={trackAppClick}
@@ -551,7 +554,7 @@ export default function Home() {
 
               <div className="max-w-md mx-auto pt-4">
                 <a
-                  href="https://www.acueapp.com.br"
+                  href="https://www.acueapp.com.br/?cadastro=1"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={trackAppClick}
