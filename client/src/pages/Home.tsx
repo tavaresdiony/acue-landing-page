@@ -585,6 +585,7 @@ export default function Home() {
             <a href="#how-it-works" className="hover:text-[#00E676] transition-colors">Como Funciona</a>
             <a href="#pricing" className="hover:text-[#00E676] transition-colors">Preços</a>
             <a href="#faq" className="hover:text-[#00E676] transition-colors">Dúvidas</a>
+            <a href="/privacidade" className="hover:text-[#00E676] transition-colors">Política de Privacidade</a>
           </div>
 
           <div className="text-center md:text-right space-y-1">
