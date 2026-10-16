@@ -20,14 +20,14 @@ const secoes: { titulo: string; paragrafos: string[] }[] = [
   {
     titulo: 'Medição de anúncios (Pixel da Meta)',
     paragrafos: [
-      'Usamos o Pixel da Meta (Instagram e Facebook) para medir quantas pessoas visitam o site e clicam em "Criar conta" depois de ver um anúncio nosso. A Meta pode receber informações como o endereço IP, identificadores do navegador e as páginas visitadas, conforme a política de privacidade da própria Meta.',
+      'Usamos o Pixel da Meta (Instagram e Facebook) para medir quantas pessoas visitam o site e o app e criam conta depois de ver um anúncio nosso. A Meta pode receber informações como o endereço IP, identificadores do navegador e as páginas visitadas, conforme a política de privacidade da própria Meta.',
     ],
   },
   {
     titulo: 'Cadastro e uso do app',
     paragrafos: [
       'Ao criar uma conta no app, coletamos: nome, nome de usuário, e-mail, senha (armazenada como hash criptográfico), dados financeiros inseridos por você (gastos, receitas, metas) e informações do dispositivo para suporte técnico.',
-      'Os dados são armazenados de forma segura no Supabase (AWS São Paulo - sa-east-1), em servidores localizados no Brasil, com criptografia em trânsito (TLS) e em repouso. Não rastreamos informações financeiras individuais para análise de uso.',
+      'Os dados são armazenados de forma segura no Supabase, em servidores localizados no Brasil, com criptografia em trânsito (TLS) e em repouso. Não vendemos nem alugamos dados pessoais, e não rastreamos informações financeiras individuais para análise de uso.',
     ],
   },
   {
@@ -66,7 +66,7 @@ export default function Privacidade() {
 
       <main className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-3xl md:text-4xl font-extrabold font-sora mb-2">Política de Privacidade</h1>
-        <p className="text-sm text-gray-500 mb-10">Última atualização: 11 de outubro de 2026</p>
+        <p className="text-sm text-gray-500 mb-10">Última atualização: 16 de outubro de 2026</p>
 
         <div className="space-y-9">
           {secoes.map((s) => (
