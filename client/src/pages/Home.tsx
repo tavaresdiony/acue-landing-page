@@ -39,7 +39,7 @@ export default function Home() {
     },
     {
       q: "Qual a diferença entre o plano Gratuito e o PRO?",
-      a: "O plano Gratuito oferece controle completo de receitas, despesas, contas recorrentes e dashboard básico para organizar seu mês. O plano PRO desbloqueia recursos avançados como a calculadora de investimentos inteligente, criação de metas e reservas financeiras ilimitadas, e acompanhamento profundo para você planejar seu futuro."
+      a: "O plano Gratuito oferece controle de receitas e despesas, saldo projetado com limite diário, metas, reserva financeira, dívidas e parcelamentos e um dashboard básico para organizar seu mês. O plano PRO desbloqueia a previsão completa (ritmo de gastos, projeção por categoria e simulador de compras), orçamento por categoria, contas recorrentes, rachar conta, relatório mensal, calculadora de investimentos e assistente de IA."
     },
     {
       q: "Como funciona o cancelamento da assinatura PRO?",
@@ -179,7 +179,7 @@ export default function Home() {
                 </div>
                 <div>
                   <div className="text-2xl font-bold font-sora text-[#00E676]">PRO</div>
-                  <div className="text-xs text-gray-500">Metas & Investimentos</div>
+                  <div className="text-xs text-gray-500">Previsão & Investimentos</div>
                 </div>
               </div>
             </div>
@@ -420,7 +420,11 @@ export default function Home() {
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Gerenciamento de contas recorrentes</span>
+                    <span>Saldo projetado e limite diário de gastos</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 size={14} className="text-[#00E676]" />
+                    <span>Metas e reserva financeira</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
@@ -463,15 +467,23 @@ export default function Home() {
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
+                    <span>Previsão completa e simulador de compras</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 size={14} className="text-[#00E676]" />
+                    <span>Orçamento por categoria e contas recorrentes</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 size={14} className="text-[#00E676]" />
                     <span>Calculadora de Investimentos Inteligente</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Criação ilimitada de Metas e Reservas</span>
+                    <span>Análise profunda de gastos e relatórios</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Análise profunda de gastos e relatórios</span>
+                    <span>Assistente de IA</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
