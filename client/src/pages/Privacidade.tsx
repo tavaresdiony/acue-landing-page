@@ -31,6 +31,13 @@ const secoes: { titulo: string; paragrafos: string[] }[] = [
     ],
   },
   {
+    titulo: 'Registro por voz e importação de extrato',
+    paragrafos: [
+      'No registro por voz, o áudio é enviado ao servidor apenas para ser transcrito em texto (pelo Whisper, da Groq) e não é guardado. O texto resultante é interpretado por IA para identificar valor, data e categoria, e o lançamento só entra depois da sua conferência.',
+      'Na importação de extrato, o arquivo (OFX, CSV ou PDF com texto) é lido no seu aparelho; CPF, agência e conta são descartados. Para sugerir categorias, apenas as descrições de estabelecimentos, sem valores nem nomes de pessoas, são enviadas à IA. Os lançamentos também só entram depois da sua conferência.',
+    ],
+  },
+  {
     titulo: 'Seus direitos (LGPD)',
     paragrafos: [
       'Você tem direito a acessar, corrigir e excluir seus dados a qualquer momento. Ao solicitar a exclusão da conta, seus dados financeiros são marcados como excluídos e removidos permanentemente em até 30 dias. Você também pode pedir a exclusão dos dados de navegação e das gravações de tela.',
@@ -66,7 +73,7 @@ export default function Privacidade() {
 
       <main className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-3xl md:text-4xl font-extrabold font-sora mb-2">Política de Privacidade</h1>
-        <p className="text-sm text-gray-500 mb-10">Última atualização: 16 de outubro de 2026</p>
+        <p className="text-sm text-gray-500 mb-10">Última atualização: 5 de novembro de 2026</p>
 
         <div className="space-y-9">
           {secoes.map((s) => (

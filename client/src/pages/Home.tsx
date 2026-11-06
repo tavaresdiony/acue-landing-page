@@ -43,7 +43,7 @@ export default function Home() {
     },
     {
       q: "Como funciona o cancelamento da assinatura PRO?",
-      a: "Sem burocracia ou fidelidade. Como o Acué é um Web App moderno (PWA), você pode solicitar o cancelamento a qualquer momento enviando um e-mail simples para contato@acueapp.com.br. Em breve, você poderá realizar o cancelamento de forma totalmente automatizada e com um clique diretamente na aba de configurações do próprio aplicativo."
+      a: "Sem burocracia ou fidelidade. Como o Acué é um Web App moderno (PWA), você cancela a qualquer momento, com um toque, direto no aplicativo: Perfil › Gerenciar assinatura. Se preferir, também dá para pedir pelo e-mail contato@acueapp.com.br."
     }
   ];
 
