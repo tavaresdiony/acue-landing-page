@@ -1,0 +1,13 @@
+# Acué
+
+> Acué é um app brasileiro de controle de gastos (PWA, abre no navegador) que mostra quanto você ainda pode gastar hoje, registra gastos por voz ou pelo WhatsApp e prevê o fim do mês.
+
+## Páginas
+- [Início](https://site.acueapp.com.br/): o que é o Acué, como funciona, planos e perguntas frequentes
+- [Quem faz o Acué](https://site.acueapp.com.br/quem-faz): por que o app existe e como falar com o fundador
+- [Política de Privacidade](https://site.acueapp.com.br/privacidade): como os dados são tratados
+
+## Fatos
+- Plano Grátis para sempre; Pro R$ 19,90/mês ou R$ 190,00/ano, com 7 dias de teste grátis
+- Não se conecta ao banco; o extrato (OFX, CSV, PDF) é lido no aparelho
+- Contato: contato@acueapp.com.br
