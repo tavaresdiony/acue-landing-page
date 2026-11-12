@@ -162,6 +162,14 @@ export default function Home() {
                 <p className="text-xs text-gray-400 mt-3 px-4 leading-relaxed">
                   Você vai direto para o cadastro. Leva menos de 1 minuto e não precisa de cartão.
                 </p>
+                <a
+                  href="https://www.acueapp.com.br/?extrato=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-3 px-4 text-sm font-bold text-[#00E676] hover:underline"
+                >
+                  Ou veja para onde seu dinheiro foi, sem cadastro →
+                </a>
                 <p className="text-[11px] text-gray-500 mt-2 px-4 leading-relaxed">
                   📱 O Acué é um <strong>PWA (Web App Progressivo)</strong>. Acesse direto pelo navegador e adicione à sua tela inicial como um aplicativo super leve, sem precisar baixar nada nas lojas!
                 </p>
@@ -424,6 +432,10 @@ export default function Home() {
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
+                    <span>Até 3 contas recorrentes (aluguel, internet, assinatura)</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 size={14} className="text-[#00E676]" />
                     <span>Metas e reserva financeira</span>
                   </li>
                   <li className="flex items-center gap-2">
@@ -451,7 +463,7 @@ export default function Home() {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg font-bold font-sora text-[#00E676]">Acué PRO</h3>
-                  <p className="text-xs text-gray-400 mt-1">Para quem quer planejar e investir no futuro.</p>
+                  <p className="text-xs text-gray-400 mt-1">Para quem quer o Acué fazendo o trabalho pesado: voz sem limite, previsão e relatórios.</p>
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-4xl font-extrabold font-sora">
@@ -471,7 +483,7 @@ export default function Home() {
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Orçamento por categoria e contas recorrentes</span>
+                    <span>Orçamento por categoria e contas recorrentes ilimitadas</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
@@ -483,7 +495,7 @@ export default function Home() {
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Assistente de IA</span>
+                    <span>Assistente de IA e registro por voz ilimitado</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00E676]" />
@@ -597,6 +609,7 @@ export default function Home() {
             <a href="#how-it-works" className="hover:text-[#00E676] transition-colors">Como Funciona</a>
             <a href="#pricing" className="hover:text-[#00E676] transition-colors">Preços</a>
             <a href="#faq" className="hover:text-[#00E676] transition-colors">Dúvidas</a>
+            <a href="/quem-faz" className="hover:text-[#00E676] transition-colors">Quem faz o Acué</a>
             <a href="/privacidade" className="hover:text-[#00E676] transition-colors">Política de Privacidade</a>
           </div>
 
