@@ -69,16 +69,16 @@ const secoes: { titulo: string; paragrafos: string[] }[] = [
 
 export default function Privacidade() {
   return (
-    <div className="min-h-screen bg-[#0B0C0E] text-white">
+    <div className="min-h-screen bg-[#0A0B0A] text-white">
       <header className="border-b border-white/5">
         <div className="max-w-3xl mx-auto px-4 py-5 flex items-center justify-between">
           <a href="/" className="flex items-center gap-2.5">
             <AcueLogo size={28} />
-            <span className="text-base font-bold font-sora">Acué</span>
+            <span className="text-base font-bold ">Acué</span>
           </a>
           <a
             href="/"
-            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#00E676] transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#00E5A0] transition-colors"
           >
             <ArrowLeft size={16} />
             <span>Voltar ao início</span>
@@ -87,13 +87,13 @@ export default function Privacidade() {
       </header>
 
       <main className="max-w-3xl mx-auto px-4 py-12">
-        <h1 className="text-3xl md:text-4xl font-extrabold font-sora mb-2">Política de Privacidade</h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold  mb-2">Política de Privacidade</h1>
         <p className="text-sm text-gray-500 mb-10">Última atualização: 11 de novembro de 2026</p>
 
         <div className="space-y-9">
           {secoes.map((s) => (
             <section key={s.titulo}>
-              <h2 className="text-lg font-bold font-sora text-[#00E676] mb-3">{s.titulo}</h2>
+              <h2 className="text-lg font-bold  text-[#00E5A0] mb-3">{s.titulo}</h2>
               <div className="space-y-3 text-sm md:text-base text-gray-300 leading-relaxed">
                 {s.paragrafos.map((p) => (
                   <p key={p}>{p}</p>

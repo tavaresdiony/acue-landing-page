@@ -1,14 +1,8 @@
-import React, { useState } from 'react';
-import { 
-  ArrowRight, Shield, Zap, TrendingUp, Compass, 
-  Smartphone, Award, Heart, HelpCircle, CheckCircle2, 
-  MessageSquare, Star, Sparkles, ChevronDown, Check,
-  PiggyBank, BarChart2, Calculator, RefreshCw, Layers,
-  CreditCard, Menu, X
-} from 'lucide-react';
-import { toast } from 'sonner';
-import AcueDashboardMockup from '@/components/AcueDashboardMockup';
-import AcueLogo from '@/components/AcueLogo';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 declare global {
   interface Window {
@@ -16,641 +10,514 @@ declare global {
   }
 }
 
-function trackAppClick() {
-  window.fbq?.('track', 'Lead');
+const APP = 'https://www.acueapp.com.br/?cadastro=1';
+const APP_EXTRATO = 'https://www.acueapp.com.br/?extrato=1';
+const track = () => window.fbq?.('track', 'Lead');
+
+const FAQS = [
+  {
+    q: 'O Acué é seguro? Como meus dados são protegidos?',
+    a: 'Privacidade é prioridade. Seus dados ficam sincronizados na nuvem de forma privada e só você acessa. O Acué não tem acesso ao seu dinheiro, não vende nem aluga dados pessoais, e o extrato que você importa é lido no seu aparelho.',
+  },
+  {
+    q: 'O Acué se conecta à minha conta bancária?',
+    a: 'Não. Você registra os gastos por voz, por mensagem no WhatsApp ou importando o extrato do seu banco (OFX, CSV ou PDF com texto), e confere tudo antes de entrar. Sem pedir senha do banco.',
+  },
+  {
+    q: 'Como funciona o limite de gasto do dia?',
+    a: 'O Acué pega seu saldo, desconta as contas pendentes e a reserva do mês, e divide pelos dias que faltam. O resultado é um número só: quanto você ainda pode gastar hoje sem apertar o fim do mês.',
+  },
+  {
+    q: 'Preciso baixar na loja de aplicativos?',
+    a: 'Não. O Acué é um PWA: você abre no navegador e adiciona à tela inicial do celular, como qualquer app, leve e sem ocupar espaço. Ainda não estamos nas lojas.',
+  },
+  {
+    q: 'Qual a diferença entre o plano Grátis e o Pro?',
+    a: 'O Grátis traz lançamentos ilimitados, saldo e limite diário, metas, reserva, dívidas, até 3 contas recorrentes e 3 registros por voz por dia. O Pro libera voz sem limite, registro pelo WhatsApp, previsão completa com ritmo de gastos e simulador de compras, orçamento por categoria, contas recorrentes ilimitadas, rachar conta, relatório mensal, calculadora de investimentos e assistente de IA.',
+  },
+  {
+    q: 'Como cancelo o Pro?',
+    a: 'Sem burocracia e sem fidelidade. Dentro do app, em Perfil › Gerenciar assinatura, com um toque. Se preferir, peça por contato@acueapp.com.br.',
+  },
+];
+
+const FACTS = [
+  ['Um número só:', 'quanto posso gastar hoje'],
+  ['Registre falando:', '"gastei 45 no almoço"'],
+  ['Grátis', 'para sempre, sem cartão'],
+  ['Funciona no navegador:', 'sem baixar nada'],
+  ['Seus dados', 'só seus'],
+];
+
+const MANI =
+  'Saldo, contas pendentes e reserva entram. Sai um número só: o quanto você ainda pode gastar hoje.';
+
+const STEPS = [
+  {
+    n: '01',
+    t: 'Você fala.',
+    p: 'Segure o botão e diga "gastei 45 no almoço". O Acué entende, e você confere antes de registrar.',
+    img: '/telas/inicio.webp',
+    alt: 'Tela Início do Acué com o botão "Segure e fale o gasto" e o limite do dia',
+  },
+  {
+    n: '02',
+    t: 'Tudo anotado.',
+    p: 'Gastos, entradas e contas ficam organizados por categoria. Importar o extrato do banco também vale.',
+    img: '/telas/dados.webp',
+    alt: 'Tela Dados do Acué com lançamentos organizados por categoria',
+  },
+  {
+    n: '03',
+    t: 'O fim do mês, antes dele chegar.',
+    p: 'O Acué mostra quanto você termina o mês com e qual o limite seguro por dia.',
+    img: '/telas/previsao.webp',
+    alt: 'Tela Previsão do Acué com saldo projetado e limite por dia',
+    tag: 'Previsão completa no Pro',
+  },
+  {
+    n: '04',
+    t: 'O que sobra, guardado.',
+    p: 'Defina metas e uma reserva. Acompanhe cada uma separado, sem misturar com o dinheiro do dia a dia.',
+    img: '/telas/metas.webp',
+    alt: 'Tela Metas do Acué',
+  },
+];
+
+function Mark({ size = 32 }: { size?: number }) {
+  return (
+    <span className="mark" style={{ width: size, height: size }} aria-hidden="true">
+      <img src="/logo-mark.png" alt="" />
+    </span>
+  );
 }
 
 export default function Home() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [planoAnual, setPlanoAnual] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const [sm, setSm] = useState(false);
+  const [menu, setMenu] = useState(false);
+  const [anual, setAnual] = useState(false);
 
-  const faqs = [
-    {
-      q: "O Acué é seguro? Como meus dados são protegidos?",
-      a: "Privacidade é nossa prioridade absoluta. O Acué utiliza tecnologias modernas de proteção de dados para garantir que suas informações financeiras estejam sempre seguras. Nós não temos acesso ao seu dinheiro e todos os seus dados são sincronizados em nuvem de forma 100% privada, garantindo que apenas você tenha acesso a eles."
-    },
-    {
-      q: "O Acué se conecta à minha conta bancária?",
-      a: "Não. O Acué foi desenhado para manter você no controle total de forma simples e tátil. Todas as inserções e organizações são feitas de maneira manual e inteligente dentro do aplicativo, garantindo que você crie o hábito saudável de acompanhar suas finanças sem expor suas credenciais bancárias ou senhas."
-    },
-    {
-      q: "Como funciona a previsão de fim do mês?",
-      a: "Nosso algoritmo inteligente analisa seus gastos cadastrados (contas recorrentes, despesas fixas, parcelamentos) e seu saldo disponível. Com isso, ele calcula um 'limite diário seguro' para você gastar e projeta exatamente quanto vai sobrar na sua conta no último dia do mês, ajudando você a planejar suas economias."
-    },
-    {
-      q: "Qual a diferença entre o plano Gratuito e o PRO?",
-      a: "O plano Gratuito oferece controle de receitas e despesas, saldo projetado com limite diário, metas, reserva financeira, dívidas e parcelamentos e um dashboard básico para organizar seu mês. O plano PRO desbloqueia a previsão completa (ritmo de gastos, projeção por categoria e simulador de compras), orçamento por categoria, contas recorrentes, rachar conta, relatório mensal, calculadora de investimentos e assistente de IA."
-    },
-    {
-      q: "Como funciona o cancelamento da assinatura PRO?",
-      a: "Sem burocracia ou fidelidade. Como o Acué é um Web App moderno (PWA), você cancela a qualquer momento, com um toque, direto no aplicativo: Perfil › Gerenciar assinatura. Se preferir, também dá para pedir pelo e-mail contato@acueapp.com.br."
-    }
-  ];
+  useEffect(() => {
+    const f = () => setSm(window.scrollY > 40);
+    f();
+    window.addEventListener('scroll', f, { passive: true });
+    return () => window.removeEventListener('scroll', f);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menu ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menu]);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        // Hero: linhas sobem de dentro de uma máscara; celular entra de baixo girando de leve
+        gsap.from('.hero h1 .ln > span', { yPercent: 110, duration: 1.1, ease: 'expo.out', stagger: 0.12, delay: 0.1 });
+        gsap.from('.hero .sub, .hero .cta-row, .hero .fine', { y: 26, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.55 });
+        gsap.from('.hero .phone', { y: 140, rotate: 5, duration: 1.4, ease: 'expo.out', delay: 0.25 });
+        gsap.from('.hero .chip', { scale: 0.6, opacity: 0, duration: 0.8, ease: 'back.out(1.8)', stagger: 0.25, delay: 1.1 });
+        gsap.to('.hero .phone', {
+          yPercent: -6, ease: 'none',
+          scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+        });
+        gsap.to('.hero .chip.c1', { y: -60, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+        gsap.to('.hero .chip.c2', { y: 40, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+
+        // Faixa de fatos corre sozinha e acelera com a rolagem
+        const run = gsap.to('.facts-track', { xPercent: -50, duration: 38, ease: 'none', repeat: -1 });
+        ScrollTrigger.create({
+          start: 0, end: 'max',
+          onUpdate: (self) => {
+            gsap.to(run, { timeScale: 1 + Math.abs(self.getVelocity()) / 600, duration: 0.3, overwrite: true });
+            gsap.to(run, { timeScale: 1, duration: 1.2, delay: 0.3 });
+          },
+        });
+
+        // Manifesto: cada palavra acende conforme a rolagem
+        gsap.fromTo('.mani .w', { opacity: 0.16 }, {
+          opacity: 1, stagger: 0.1, ease: 'none',
+          scrollTrigger: { trigger: '.mani p', start: 'top 80%', end: 'bottom 45%', scrub: true },
+        });
+
+        // Conversa do WhatsApp: mensagens chegam uma a uma
+        const tl = gsap.timeline({ scrollTrigger: { trigger: '.chat', start: 'top 72%', end: 'bottom 40%', scrub: 0.6 } });
+        gsap.utils.toArray<HTMLElement>('.chat .bub').forEach((b, i) => {
+          tl.fromTo(b, { y: 30, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, duration: 1, ease: 'power2.out' }, i * 0.9);
+        });
+        gsap.utils.toArray<HTMLElement>('.chat .bars i').forEach((el, i) => {
+          gsap.to(el, { scaleY: 0.35, duration: 0.45 + (i % 4) * 0.12, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.05 });
+        });
+
+        // Bento: cards entram em cascata
+        gsap.from('.bx', {
+          y: 70, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09,
+          scrollTrigger: { trigger: '.bento', start: 'top 82%' },
+        });
+
+        // Títulos de seção
+        gsap.utils.toArray<HTMLElement>('.sec-h').forEach((h) => {
+          gsap.from(h, { y: 50, opacity: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: h, start: 'top 88%' } });
+        });
+
+        // Rodapé: palavra gigante sobe ao chegar no fim
+        gsap.from('.word', { yPercent: 40, ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+        gsap.from('.cta .peek .phone', { y: 120, duration: 1.2, ease: 'expo.out', stagger: 0.12, scrollTrigger: { trigger: '.cta .peek', start: 'top 90%' } });
+      });
+
+      // História fixa (desktop): o celular fica parado, o texto e a tela trocam
+      mm.add('(prefers-reduced-motion: no-preference) and (min-width: 901px)', () => {
+        const steps = gsap.utils.toArray<HTMLElement>('.story-steps .step');
+        const imgs = gsap.utils.toArray<HTMLElement>('.story-stage .scr img');
+        const bars = gsap.utils.toArray<HTMLElement>('.dots i');
+        gsap.set(steps, { opacity: 0, y: 40 });
+        gsap.set(steps[0], { opacity: 1, y: 0 });
+        gsap.set(imgs, { clipPath: 'inset(100% 0 0 0)' });
+        gsap.set(imgs[0], { clipPath: 'inset(0% 0 0 0)' });
+        const n = steps.length;
+        const tl = gsap.timeline({
+          defaults: { ease: 'power2.inOut' },
+          scrollTrigger: {
+            trigger: '.story', start: 'top top', end: () => '+=' + window.innerHeight * (n * 0.9),
+            pin: '.story-pin', scrub: 0.6, anticipatePin: 1,
+            onUpdate: (s) => {
+              const p = s.progress * n;
+              bars.forEach((b, i) => b.style.setProperty('--f', String(Math.min(1, Math.max(0, p - i)))));
+            },
+          },
+        });
+        for (let i = 1; i < n; i++) {
+          tl.to(steps[i - 1], { opacity: 0, y: -40, duration: 0.4 }, i - 0.1)
+            .to(steps[i], { opacity: 1, y: 0, duration: 0.5 }, i + 0.1)
+            .to(imgs[i], { clipPath: 'inset(0% 0 0 0)', duration: 0.6 }, i - 0.05);
+        }
+        tl.to({}, { duration: 0.6 });
+      });
+
+      // Sem animação (movimento reduzido): mostra o primeiro passo e a tela dele
+      mm.add('(prefers-reduced-motion: reduce)', () => {
+        gsap.set('.story-steps .step', { position: 'relative', opacity: 1 });
+      });
+    }, root);
+    return () => ctx.revert();
+  }, []);
+
+  const close = () => setMenu(false);
+  const manis = MANI.split(' ');
+  const hl = new Set(['número', 'só:', 'gastar', 'hoje.']);
 
   return (
-    <div className="min-h-screen bg-[#0B0C0E] text-white overflow-hidden relative">
-      {/* Background Orbs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#00E676]/5 blur-[120px] pointer-events-none"></div>
-      <div className="absolute top-[40%] right-[-10%] w-[600px] h-[600px] rounded-full bg-[#8E24AA]/5 blur-[150px] pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] rounded-full bg-[#00E676]/5 blur-[120px] pointer-events-none"></div>
-
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-50 bg-[#0B0C0E]/80 backdrop-blur-md border-b border-white/5 py-4">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <AcueLogo size={34} />
-            <span className="text-xl font-extrabold tracking-tight font-sora bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              Acué
-            </span>
-          </div>
-          
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8 text-sm text-gray-400 font-medium">
-            <a href="#features" className="hover:text-[#00E676] transition-colors">Recursos</a>
-            <a href="#how-it-works" className="hover:text-[#00E676] transition-colors">Como Funciona</a>
-            <a href="#pricing" className="hover:text-[#00E676] transition-colors">Preços</a>
-            <a href="#faq" className="hover:text-[#00E676] transition-colors">Dúvidas</a>
-          </nav>
-          
-          <div className="flex items-center gap-4">
-            <a
-              href="https://www.acueapp.com.br/?cadastro=1"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={trackAppClick}
-              className="text-xs md:text-sm font-bold bg-[#00E676] hover:bg-[#00C864] text-black px-5 py-2 rounded-full shadow-[0_0_20px_rgba(0,230,118,0.25)] hover:shadow-[0_0_25px_rgba(0,230,118,0.4)] transition-all active:scale-[0.97]"
-            >
-              Crie sua conta
-            </a>
-            
-            {/* Mobile Menu Button */}
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-1.5 bg-white/5 border border-white/10 rounded-lg text-gray-400 hover:text-white"
-            >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
+    <div className="lp" ref={root}>
+      {/* NAV */}
+      <header className={'nav' + (sm ? ' sm' : '')}>
+        <a href="/" className="brand" aria-label="Acué, página inicial">
+          <Mark /> Acué
+        </a>
+        <nav className="nav-links" aria-label="Principal">
+          <a href="#como">Como funciona</a>
+          <a href="#recursos">Recursos</a>
+          <a href="#precos">Preços</a>
+          <a href="#duvidas">Dúvidas</a>
+        </nav>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <a href={APP} onClick={track} className="btn btn-p hide-m">Criar conta grátis</a>
+          <button className="burger" aria-label={menu ? 'Fechar menu' : 'Abrir menu'} onClick={() => setMenu(!menu)}>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+              {menu ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 8h16M4 16h16" />}
+            </svg>
+          </button>
         </div>
-
-        {/* Mobile Navigation Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-[#0B0C0E]/95 border-b border-white/5 backdrop-blur-lg py-6 px-4 space-y-4 flex flex-col shadow-2xl z-50 animate-fade-in">
-            <a 
-              href="#features" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-gray-300 hover:text-[#00E676] text-sm font-medium py-2 border-b border-white/5"
-            >
-              Recursos
-            </a>
-            <a 
-              href="#how-it-works" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-gray-300 hover:text-[#00E676] text-sm font-medium py-2 border-b border-white/5"
-            >
-              Como Funciona
-            </a>
-            <a 
-              href="#pricing" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-gray-300 hover:text-[#00E676] text-sm font-medium py-2 border-b border-white/5"
-            >
-              Preços
-            </a>
-            <a 
-              href="#faq" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-gray-300 hover:text-[#00E676] text-sm font-medium py-2"
-            >
-              Dúvidas
-            </a>
-          </div>
-        )}
       </header>
+      <div className={'drawer' + (menu ? ' open' : '')} aria-hidden={!menu}>
+        <a className="big" href="#como" onClick={close}>Como funciona</a>
+        <a className="big" href="#recursos" onClick={close}>Recursos</a>
+        <a className="big" href="#precos" onClick={close}>Preços</a>
+        <a className="big" href="#duvidas" onClick={close}>Dúvidas</a>
+        <a className="btn btn-p" style={{ marginTop: 24, justifyContent: 'center' }} href={APP} onClick={track}>Criar conta grátis</a>
+      </div>
 
-      {/* Hero Section */}
-      <section className="pt-16 pb-20 md:pt-24 md:pb-32 relative">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            {/* Left Content */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 bg-[#00E676]/10 border border-[#00E676]/20 px-3.5 py-1.5 rounded-full text-xs text-[#00E676] font-bold">
-                <Sparkles size={12} />
-                <span>O Futuro das Finanças Pessoais Chegou</span>
-              </div>
-              
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight font-sora leading-[1.1] text-white">
-                Não gerencie mais seu dinheiro <span className="bg-gradient-to-r from-[#00E676] to-[#00B0FF] bg-clip-text text-transparent">sozinho</span>
+      <main>
+        {/* HERO */}
+        <section className="hero" aria-labelledby="h1">
+          <div className="wrap hero-grid">
+            <div>
+              <div className="eyebrow">Controle de gastos com limite diário</div>
+              <h1 id="h1">
+                <span className="ln"><span>Quanto posso</span></span>
+                <span className="ln"><span>gastar <span className="acc">hoje?</span></span></span>
               </h1>
-              
-              <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed">
-                Esqueça planilhas complicadas. O <strong className="text-white">Acué</strong> transforma sua organização financeira em uma experiência simples, inteligente e agradável. Saiba para onde seu dinheiro vai e planeje o futuro com confiança.
-              </p>
-
-              {/* Download CTA Button */}
-              <div className="pt-2 max-w-md">
-                <a
-                  href="https://www.acueapp.com.br/?cadastro=1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={trackAppClick}
-                  className="inline-flex bg-[#00E676] hover:bg-[#00C864] text-black font-extrabold text-base py-3.5 px-8 rounded-full items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,230,118,0.3)] active:scale-[0.97]"
-                >
-                  <span>Criar conta grátis</span>
-                  <ArrowRight size={18} />
-                </a>
-                <p className="text-xs text-gray-400 mt-3 px-4 leading-relaxed">
-                  Você vai direto para o cadastro. Leva menos de 1 minuto e não precisa de cartão.
-                </p>
-                <a
-                  href="https://www.acueapp.com.br/?extrato=1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-3 px-4 text-sm font-bold text-[#00E676] hover:underline"
-                >
-                  Ou veja para onde seu dinheiro foi, sem cadastro →
-                </a>
-                <p className="text-[11px] text-gray-500 mt-2 px-4 leading-relaxed">
-                  📱 O Acué é um <strong>PWA (Web App Progressivo)</strong>. Acesse direto pelo navegador e adicione à sua tela inicial como um aplicativo super leve, sem precisar baixar nada nas lojas!
-                </p>
+              <p className="sub">O Acué responde na hora e registra o gasto <b>por voz</b>. Um número só, todo dia, sem planilha.</p>
+              <div className="cta-row">
+                <a href={APP} onClick={track} className="btn btn-p">Criar conta grátis <span className="ar">→</span></a>
+                <a href={APP_EXTRATO} className="link-u">Ver meu mês sem cadastro</a>
               </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-6 grid grid-cols-3 gap-4 border-t border-white/5 max-w-lg">
-                <div>
-                  <div className="text-2xl font-bold font-sora text-white">100%</div>
-                  <div className="text-xs text-gray-500">Privado e Seguro</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold font-sora text-white">0</div>
-                  <div className="text-xs text-gray-500">Planilhas Necessárias</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold font-sora text-[#00E676]">PRO</div>
-                  <div className="text-xs text-gray-500">Previsão & Investimentos</div>
-                </div>
-              </div>
+              <p className="fine">Grátis para sempre. Sem cartão. Abre no navegador, sem baixar nada.</p>
             </div>
-
-            {/* Right Interactive App Mockup */}
-            <div className="lg:col-span-5 relative flex justify-center">
-              {/* Decorative background glow behind mockup */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#00E676]/10 to-[#8E24AA]/10 rounded-full blur-3xl -z-10 transform scale-90"></div>
-              
-              <div className="relative">
-                {/* Float tags */}
-                <div className="absolute -left-12 top-20 bg-[#111315]/90 border border-white/10 p-3 rounded-xl shadow-xl backdrop-blur-md hidden sm:flex items-center gap-2.5 z-10 animate-bounce" style={{ animationDuration: '4s' }}>
-                  <div className="w-8 h-8 rounded-full bg-[#00E676]/10 flex items-center justify-center text-[#00E676]">
-                    <TrendingUp size={16} />
-                  </div>
-                  <div>
-                    <div className="text-[10px] text-gray-400">Saldo Previsto</div>
-                    <div className="text-xs font-bold text-white">R$ 3.200,82</div>
-                  </div>
-                </div>
-
-                <div className="absolute -right-12 bottom-28 bg-[#111315]/90 border border-white/10 p-3 rounded-xl shadow-xl backdrop-blur-md hidden sm:flex items-center gap-2.5 z-10 animate-bounce" style={{ animationDuration: '5s' }}>
-                  <div className="w-8 h-8 rounded-full bg-[#8E24AA]/10 flex items-center justify-center text-[#8E24AA]">
-                    <CreditCard size={16} />
-                  </div>
-                  <div>
-                    <div className="text-[10px] text-gray-400">Cartão de Crédito</div>
-                    <div className="text-xs font-bold text-[#9C27B0]">R$ 50,00</div>
-                  </div>
-                </div>
-
-                {/* The Interactive Mockup Component */}
-                <AcueDashboardMockup />
-                
-                <p className="text-center text-[11px] text-gray-500 mt-3 italic">
-                  💡 Clique nos botões de navegação abaixo do mockup para testar as telas do app!
-                </p>
+            <div className="phone-col">
+              <div className="phone">
+                <div className="scr"><img src="/telas/inicio.webp" width="828" height="1792" alt="Tela Início do Acué mostrando o saldo disponível e o quanto ainda pode gastar hoje" fetchPriority="high" /></div>
               </div>
+              <div className="chip c1"><i>🎤</i><span>Você fala<small>"gastei 45 no almoço"</small></span></div>
+              <div className="chip c2"><i>✓</i><span>Almoço · R$ 45,00<small>Alimentação</small></span></div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Benefits Section */}
-      <section id="features" className="py-20 bg-[#0F1013] border-y border-white/5 relative">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#00E676]">Benefícios do Acué</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-sora">
-              Tudo o que você precisa para dominar suas finanças
-            </h2>
-            <p className="text-sm sm:text-base text-gray-400">
-              Desenhado para ser simples, construído para dar resultados. Conheça as funcionalidades que vão transformar sua relação com o dinheiro.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Benefit 1 */}
-            <div className="bg-[#14161B] border border-white/5 p-6 rounded-2xl hover:border-[#00E676]/20 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-[#00E676]/10 flex items-center justify-center text-[#00E676] mb-5 group-hover:scale-110 transition-transform">
-                <BarChart2 size={24} />
-              </div>
-              <h3 className="text-lg font-bold font-sora mb-2">Dashboard Financeiro Inteligente</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Tenha clareza imediata sobre sua saúde financeira. Acompanhe receitas, despesas, saldos e limites de forma visual, elegante e unificada.
-              </p>
-            </div>
-
-            {/* Benefit 2 */}
-            <div className="bg-[#14161B] border border-white/5 p-6 rounded-2xl hover:border-[#00E676]/20 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-[#9C27B0] mb-5 group-hover:scale-110 transition-transform">
-                <Compass size={24} />
-              </div>
-              <h3 className="text-lg font-bold font-sora mb-2">Previsão e Limite Seguro</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Nossa inteligência calcula um limite diário seguro de gastos com base no seu saldo e contas futuras. Saiba exatamente quanto pode gastar hoje sem passar aperto amanhã.
-              </p>
-            </div>
-
-            {/* Benefit 3 */}
-            <div className="bg-[#14161B] border border-white/5 p-6 rounded-2xl hover:border-[#00E676]/20 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-5 group-hover:scale-110 transition-transform">
-                <PiggyBank size={24} />
-              </div>
-              <h3 className="text-lg font-bold font-sora mb-2">Metas & Reservas Dedicadas</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Crie reservas específicas para emergências, viagens ou objetivos pessoais. Acompanhe a evolução de cada meta de forma independente e prazerosa.
-              </p>
-            </div>
-
-            {/* Benefit 4 */}
-            <div className="bg-[#14161B] border border-white/5 p-6 rounded-2xl hover:border-[#00E676]/20 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center text-[#FF7043] mb-5 group-hover:scale-110 transition-transform">
-                <CreditCard size={24} />
-              </div>
-              <h3 className="text-lg font-bold font-sora mb-2">Controle de Parcelas e Cartões</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Chega de surpresas na fatura. Monitore suas compras parceladas de forma transparente e preveja o peso dos cartões nos meses seguintes automaticamente.
-              </p>
-            </div>
-
-            {/* Benefit 5 */}
-            <div className="bg-[#14161B] border border-white/5 p-6 rounded-2xl hover:border-[#00E676]/20 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-400 mb-5 group-hover:scale-110 transition-transform">
-                <Calculator size={24} />
-              </div>
-              <h3 className="text-lg font-bold font-sora mb-2">Simulador de Investimentos PRO</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Calcule juros compostos, projete sua independência financeira e simule aportes mensais com taxas personalizadas diretamente na aba de Finanças do app.
-              </p>
-            </div>
-
-            {/* Benefit 6 */}
-            <div className="bg-[#14161B] border border-white/5 p-6 rounded-2xl hover:border-[#00E676]/20 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-[#00E676]/10 flex items-center justify-center text-[#00E676] mb-5 group-hover:scale-110 transition-transform">
-                <Shield size={24} />
-              </div>
-              <h3 className="text-lg font-bold font-sora mb-2">Privacidade Total Garantida</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Nós respeitamos sua privacidade. Seus dados financeiros pertencem apenas a você, armazenados com segurança em nuvem e protegidos de forma 100% confidencial.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* App Showcase & Story */}
-      <section id="how-it-works" className="py-20 relative">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column: Visual Representation */}
-            <div className="lg:col-span-5 flex justify-center lg:order-last">
-              <div className="relative p-6 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md">
-                <div className="bg-[#111315] rounded-2xl p-5 space-y-4 max-w-[320px] shadow-2xl">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🔮</span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Aba Previsão</span>
-                  </div>
-                  <div className="text-xl font-bold font-sora text-white">Previsão Inteligente de Fim do Mês</div>
-                  
-                  <div className="bg-amber-500/10 border border-amber-500/20 p-3 rounded-xl">
-                    <div className="text-[10px] text-amber-500 uppercase font-bold">ALERTA DO APP</div>
-                    <div className="text-xs text-amber-200 mt-0.5 leading-relaxed">Vai sobrar pouco. Nesse ritmo você termina com R$ 335,00.</div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="bg-[#17191D] p-2.5 rounded-lg border border-white/5">
-                      <div className="text-[8px] text-gray-500 uppercase font-bold">SALDO PROJETADO</div>
-                      <div className="text-sm font-extrabold text-[#00E676] font-sora mt-0.5">R$ 335,00</div>
-                    </div>
-                    <div className="bg-[#17191D] p-2.5 rounded-lg border border-white/5">
-                      <div className="text-[8px] text-gray-500 uppercase font-bold">LIMITE SEGURO/DIA</div>
-                      <div className="text-sm font-extrabold text-[#00E676] font-sora mt-0.5">R$ 260,53</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Copywriting */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#00E676]">O Carro-Forte do Acué</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold font-sora leading-tight">
-                Aba Previsão: Saiba o futuro da sua conta antes dele acontecer
-              </h2>
-              <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
-                Nós sabemos o quanto é estressante não saber para onde o dinheiro está indo ou ter aquela surpresa desagradável na fatura do cartão de crédito. A aba de **Previsão** foi desenhada justamente para trazer <strong className="text-white">tranquilidade, clareza e controle absoluto</strong> para sua rotina.
-              </p>
-
-              <div className="space-y-4 pt-2">
-                <div className="flex gap-3.5">
-                  <div className="w-6 h-6 rounded-full bg-[#00E676]/10 flex items-center justify-center text-[#00E676] shrink-0 mt-0.5">
-                    <Check size={14} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-white">Cálculo de Limite Seguro por Dia</h4>
-                    <p className="text-xs text-gray-400 mt-0.5">O Acué calcula automaticamente quanto você pode gastar por dia hoje, garantindo que suas contas pendentes sejam quitadas sem sustos.</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3.5">
-                  <div className="w-6 h-6 rounded-full bg-[#00E676]/10 flex items-center justify-center text-[#00E676] shrink-0 mt-0.5">
-                    <Check size={14} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-white">Saldo Projetado para o Fim do Mês</h4>
-                    <p className="text-xs text-gray-400 mt-0.5">Veja uma projeção realista de quanto vai sobrar no último dia do mês, baseada nos seus hábitos atuais e nas suas contas pendentes.</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3.5">
-                  <div className="w-6 h-6 rounded-full bg-[#00E676]/10 flex items-center justify-center text-[#00E676] shrink-0 mt-0.5">
-                    <Check size={14} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-white">Alertas de Ritmo de Gastos</h4>
-                    <p className="text-xs text-gray-400 mt-0.5">O aplicativo avisa preventivamente quando o seu ritmo de gastos diários ameaçar a sua meta de reserva mensal.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-[#0F1013] border-y border-white/5 relative">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#00E676]">Preços Justos</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-sora">Planos simples para todos</h2>
-            <p className="text-sm sm:text-base text-gray-400">
-              Comece de graça e mude para o PRO quando quiser acelerar suas conquistas financeiras.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-            {/* Free Plan */}
-            <div className="bg-[#14161B] border border-white/5 rounded-3xl p-8 relative flex flex-col justify-between">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-bold font-sora">Acué Free</h3>
-                  <p className="text-xs text-gray-400 mt-1">Essencial para controle básico do dia a dia.</p>
-                </div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold font-sora">R$ 0</span>
-                  <span className="text-xs text-gray-500">/ sempre</span>
-                </div>
-                <div className="h-[1px] bg-white/5"></div>
-                <ul className="space-y-3 text-xs text-gray-300">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Dashboard básico e limpo</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Lançamentos de gastos ilimitados</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Saldo projetado e limite diário de gastos</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Até 3 contas recorrentes (aluguel, internet, assinatura)</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Metas e reserva financeira</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Sincronização em nuvem segura</span>
-                  </li>
-                </ul>
-              </div>
-              <a
-                href="https://www.acueapp.com.br/?cadastro=1"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={trackAppClick}
-                className="mt-8 w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs py-3 rounded-xl transition-all text-center"
-              >
-                Começar de graça
-              </a>
-            </div>
-
-            {/* PRO Plan */}
-            <div className="bg-[#14161B] border-2 border-[#00E676] rounded-3xl p-8 relative flex flex-col justify-between shadow-[0_0_30px_rgba(0,230,118,0.1)]">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00E676] text-black font-extrabold text-[9px] px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                Mais Popular
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-bold font-sora text-[#00E676]">Acué PRO</h3>
-                  <p className="text-xs text-gray-400 mt-1">Para quem quer o Acué fazendo o trabalho pesado: voz sem limite, previsão e relatórios.</p>
-                </div>
-                {/* Seletor mensal / anual */}
-                <div role="tablist" aria-label="Periodicidade do plano" className="relative grid grid-cols-2 p-1 rounded-full bg-white/5 border border-white/10 text-xs font-bold">
-                  <div
-                    aria-hidden="true"
-                    className={`absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-[#00E676] shadow-[0_0_15px_rgba(0,230,118,0.3)] transition-transform duration-300 ease-out ${planoAnual ? 'translate-x-full' : 'translate-x-0'}`}
-                  />
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={!planoAnual}
-                    onClick={() => setPlanoAnual(false)}
-                    className={`relative z-10 py-2 rounded-full transition-colors ${!planoAnual ? 'text-black' : 'text-gray-400 hover:text-white'}`}
-                  >
-                    Mensal
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={planoAnual}
-                    onClick={() => setPlanoAnual(true)}
-                    className={`relative z-10 py-2 rounded-full transition-colors ${planoAnual ? 'text-black' : 'text-gray-400 hover:text-white'}`}
-                  >
-                    Anual <span className={planoAnual ? 'text-black/70' : 'text-[#00E676]'}>-20%</span>
-                  </button>
-                </div>
-                <div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-extrabold font-sora">
-                      {planoAnual ? 'R$ 190,00' : 'R$ 19,90'}
-                    </span>
-                    <span className="text-xs text-gray-500">{planoAnual ? '/ ano' : '/ mês'}</span>
-                  </div>
-                  <p className="text-xs text-gray-400 mt-2 min-h-[2.5rem]">
-                    {planoAnual
-                      ? 'Equivale a R$ 15,83 por mês, cerca de 20% de desconto frente a 12 mensalidades (R$ 238,80). Cobrado uma vez por ano.'
-                      : 'Cobrado todo mês. Cancele quando quiser, sem fidelidade.'}
-                  </p>
-                </div>
-                <div className="h-[1px] bg-white/5"></div>
-                <ul className="space-y-3 text-xs text-gray-300">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span className="font-bold text-white">Tudo do plano Free</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Previsão completa e simulador de compras</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Orçamento por categoria e contas recorrentes ilimitadas</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Calculadora de Investimentos Inteligente</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Análise profunda de gastos e relatórios</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Assistente de IA e registro por voz ilimitado</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#00E676]" />
-                    <span>Suporte prioritário</span>
-                  </li>
-                </ul>
-              </div>
-              <a
-                href="https://www.acueapp.com.br/?cadastro=1"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={trackAppClick}
-                className="mt-8 w-full bg-[#00E676] hover:bg-[#00C864] text-black font-extrabold text-xs py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(0,230,118,0.2)] text-center"
-              >
-                Garantir Acesso PRO
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section id="faq" className="py-20 relative">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-12 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#00E676]">Perguntas Frequentes</span>
-            <h2 className="text-3xl font-extrabold font-sora">Dúvidas Comuns</h2>
-            <p className="text-sm text-gray-400">
-              Tem alguma pergunta sobre o Acué? Encontre as respostas abaixo.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {faqs.map((faq, index) => (
-              <div 
-                key={index}
-                className="bg-[#14161B] border border-white/5 rounded-2xl overflow-hidden transition-all"
-              >
-                <button 
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full py-4.5 px-6 flex justify-between items-center text-left hover:bg-white/5 transition-colors"
-                >
-                  <span className="text-sm font-bold font-sora pr-4">{faq.q}</span>
-                  <ChevronDown 
-                    size={16} 
-                    className={`text-[#00E676] transition-transform duration-300 ${openFaq === index ? 'rotate-180' : ''}`} 
-                  />
-                </button>
-                
-                <div 
-                  className={`transition-all duration-300 ease-in-out overflow-hidden ${openFaq === index ? 'max-h-48 border-t border-white/5' : 'max-h-0'}`}
-                >
-                  <div className="p-6 text-xs sm:text-sm text-gray-400 leading-relaxed bg-[#0B0C0E]/50">
-                    {faq.a}
-                  </div>
-                </div>
-              </div>
+        {/* FAIXA */}
+        <div className="facts" aria-hidden="true">
+          <div className="facts-track">
+            {[0, 1].map((k) => (
+              <span key={k}>
+                {FACTS.map(([a, b]) => (
+                  <span key={a + k} style={{ gap: 12 }}><b>{a}</b> {b}</span>
+                ))}
+              </span>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* CTA Section */}
-      <section id="waitlist" className="py-20 relative">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-gradient-to-tr from-[#111315] to-[#14161B] border border-white/10 rounded-[32px] p-8 md:p-12 text-center relative overflow-hidden shadow-2xl">
-            {/* Glowing effect behind CTA */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-[#00E676]/10 blur-[80px] pointer-events-none"></div>
-            
-            <div className="max-w-2xl mx-auto space-y-6 relative z-10">
-              <div className="w-16 h-16 rounded-full bg-[#00E676]/10 flex items-center justify-center text-[#00E676] mx-auto mb-4">
-                <AcueLogo size={44} />
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold font-sora leading-tight">
-                Assuma o controle da sua vida financeira hoje mesmo
-              </h2>
-              <p className="text-sm sm:text-base text-gray-400">
-                Acesse o aplicativo agora mesmo de forma simples e rápida. Adicione o Acué à tela inicial do seu celular e tenha o poder da organização financeira sempre com você.
-              </p>
+        {/* MANIFESTO */}
+        <section className="mani">
+          <div className="wrap">
+            <p aria-label={MANI}>
+              {manis.map((w, i) => (
+                <span key={i} className={'w' + (hl.has(w) ? ' hl' : '')} aria-hidden="true">{w}{' '}</span>
+              ))}
+            </p>
+          </div>
+        </section>
 
-              <div className="max-w-md mx-auto pt-4">
-                <a
-                  href="https://www.acueapp.com.br/?cadastro=1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={trackAppClick}
-                  className="inline-flex bg-[#00E676] hover:bg-[#00C864] text-black font-extrabold text-base py-3.5 px-8 rounded-full items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,230,118,0.3)] active:scale-[0.97]"
-                >
-                  <span>Crie sua conta no Acué</span>
-                  <ArrowRight size={18} />
-                </a>
-                <p className="text-[10px] text-gray-500 mt-3">
-                  Acesse www.acueapp.com.br e simplifique sua vida financeira.
-                </p>
+        {/* COMO FUNCIONA — desktop fixo */}
+        <section className="story" id="como" aria-label="Como funciona">
+          <div className="wrap story-pin">
+            <div className="story-steps">
+              {STEPS.map((s) => (
+                <div className="step" key={s.n}>
+                  <div className="n">{s.n}</div>
+                  <h3>{s.t}</h3>
+                  <p>{s.p}</p>
+                  {s.tag && <span className="tag">{s.tag}</span>}
+                </div>
+              ))}
+              <div className="dots">{STEPS.map((s) => <i key={s.n} />)}</div>
+            </div>
+            <div className="story-stage">
+              <div className="phone">
+                <div className="scr">
+                  {STEPS.map((s) => <img key={s.n} src={s.img} width="828" height="1792" alt={s.alt} loading="lazy" />)}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+          {/* mobile */}
+          <div className="wrap story-m">
+            {STEPS.map((s) => (
+              <div className="it" key={s.n}>
+                <div>
+                  <div className="n">{s.n}</div>
+                  <h3>{s.t}</h3>
+                  <p>{s.p}</p>
+                  {s.tag && <span className="tag" style={{ marginTop: 14, display: 'inline-block', fontSize: 12, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', background: 'var(--accent)', color: 'var(--accent-ink)', borderRadius: 99, padding: '5px 12px' }}>{s.tag}</span>}
+                </div>
+                <div className="phone"><div className="scr"><img src={s.img} width="828" height="1792" alt={s.alt} loading="lazy" /></div></div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      {/* Footer */}
-      <footer className="bg-[#0B0C0E] border-t border-white/5 py-12 text-gray-500 text-xs">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2.5">
-            <AcueLogo size={28} />
-            <span className="text-base font-bold font-sora text-white">Acué</span>
+        {/* WHATSAPP */}
+        <section className="wa" aria-labelledby="wa-h">
+          <div className="wrap wa-grid">
+            <div>
+              <div className="eyebrow">Novo</div>
+              <h2 className="sec-h" id="wa-h">Anote pelo <span className="acc">WhatsApp.</span></h2>
+              <p className="lead">Sem abrir o app. <b>Escreva ou fale</b>, como você já faz com a família, e o Acué lança o gasto para você.</p>
+              <div className="cta-row">
+                <a href={APP} onClick={track} className="btn btn-g">Experimentar agora</a>
+              </div>
+              <p className="small-note">O registro pelo WhatsApp faz parte do Acué Pro. Contas novas ganham 7 dias de teste grátis.</p>
+            </div>
+            <div className="chat" role="img" aria-label="Exemplo de conversa: o usuário manda gastei 45 reais no almoço e o Acué responde que anotou">
+              <div className="chat-top"><Mark size={40} /><div>Acué<small>online</small></div></div>
+              <div className="bub me">gastei 45 reais no almoço<div className="bub-meta">14:02 ✓✓</div></div>
+              <div className="bub ac">✅ Anotei: Almoço, R$ 45,00<div className="bub-meta">14:02</div></div>
+              <div className="bub me">
+                <div className="wv">▶
+                  <span className="bars">{[10, 18, 26, 14, 22, 12, 24, 16, 20, 11, 25, 15].map((h, i) => <i key={i} style={{ height: h }} />)}</span>0:04
+                </div>
+                <div className="bub-meta">14:05 ✓✓</div>
+              </div>
+              <div className="bub ac">✅ Anotei: Uber, R$ 18,90 · ontem<div className="bub-meta">14:05</div></div>
+            </div>
           </div>
-          
-          <div className="flex flex-wrap justify-center gap-8 text-gray-400">
-            <a href="#features" className="hover:text-[#00E676] transition-colors">Recursos</a>
-            <a href="#how-it-works" className="hover:text-[#00E676] transition-colors">Como Funciona</a>
-            <a href="#pricing" className="hover:text-[#00E676] transition-colors">Preços</a>
-            <a href="#faq" className="hover:text-[#00E676] transition-colors">Dúvidas</a>
-            <a href="/quem-faz" className="hover:text-[#00E676] transition-colors">Quem faz o Acué</a>
-            <a href="/privacidade" className="hover:text-[#00E676] transition-colors">Política de Privacidade</a>
-          </div>
+        </section>
 
-          <div className="text-center md:text-right space-y-1">
-            <div>© 2026 Acué Finanças. Todos os direitos reservados.</div>
-            <div className="text-[10px] text-gray-600">Feito com carinho para simplificar sua vida financeira.</div>
+        {/* RECURSOS */}
+        <section className="feat" id="recursos" aria-labelledby="rec-h">
+          <div className="wrap">
+            <div className="eyebrow">O que tem dentro</div>
+            <h2 className="sec-h" id="rec-h">Feito para o seu<br />dia a dia.</h2>
+            <div className="bento">
+              <article className="bx a">
+                <div className="k"><span>Limite do dia</span><span className="pill">Grátis</span></div>
+                <div>
+                  <div className="big">R$ 159,64</div>
+                  <h3>Hoje você ainda pode gastar.</h3>
+                  <p>Calculado do seu saldo, das contas pendentes e da reserva do mês. Muda a cada gasto que você registra.</p>
+                </div>
+              </article>
+              <article className="bx b">
+                <div className="k"><span>Previsão</span><span className="pill pro">Pro</span></div>
+                <div><h3>Fim do mês, sem susto.</h3><p>Saldo projetado, ritmo de gastos e simulador de compras.</p></div>
+              </article>
+              <article className="bx c">
+                <div className="k"><span>Metas e reserva</span><span className="pill">Grátis</span></div>
+                <div><h3>Guarde com propósito.</h3><p>Cada meta com seu progresso, separada do dia a dia.</p></div>
+              </article>
+              <article className="bx d">
+                <div className="k"><span>Dívidas e parcelas</span><span className="pill">Grátis</span></div>
+                <div><h3>Sem surpresa na fatura.</h3><p>Veja o peso de cada parcela nos próximos meses.</p></div>
+              </article>
+              <article className="bx e">
+                <div className="k"><span>Rachar conta</span><span className="pill pro">Pro</span></div>
+                <div><h3>Pizza com a galera.</h3><p>Divida igual ou por pessoa e saiba quem já pagou.</p></div>
+              </article>
+              <article className="bx f">
+                <div className="k"><span>Importar extrato</span><span className="pill">Grátis</span></div>
+                <div><h3>Do banco para o Acué.</h3><p>OFX, CSV ou PDF com texto. É lido no seu aparelho, você confere tudo antes de entrar e nada duplica.</p></div>
+              </article>
+              <article className="bx g">
+                <div className="k"><span>Seus dados</span><span className="pill">Sempre</span></div>
+                <div><h3>Só seus.</h3><p>Não vendemos nem alugamos dados pessoais. Você cancela o Pro com um toque, dentro do app.</p></div>
+              </article>
+            </div>
           </div>
+        </section>
+
+        {/* PREÇOS */}
+        <section className="price" id="precos" aria-labelledby="pr-h">
+          <div className="wrap">
+            <div className="eyebrow">Planos</div>
+            <h2 className="sec-h" id="pr-h" style={{ marginBottom: 0 }}>Comece de graça.<br />Suba quando quiser.</h2>
+            <div className={'seg' + (anual ? ' an' : '')} role="group" aria-label="Periodicidade do plano Pro">
+              <span className="th" />
+              <button className={!anual ? 'on' : ''} onClick={() => setAnual(false)} aria-pressed={!anual}>Mensal</button>
+              <button className={anual ? 'on' : ''} onClick={() => setAnual(true)} aria-pressed={anual}>Anual · -20%</button>
+            </div>
+            <div className="plans">
+              <div className="plan">
+                <div className="nm"><span>Grátis</span></div>
+                <div className="pr">R$ 0<small>para sempre</small></div>
+                <div className="eq">&nbsp;</div>
+                <p className="desc">O essencial para saber quanto pode gastar, todos os dias.</p>
+                <ul>
+                  <li>Lançamentos de gastos ilimitados</li>
+                  <li>Saldo e limite diário de gastos</li>
+                  <li>Até 3 contas recorrentes</li>
+                  <li>3 registros por voz por dia</li>
+                  <li>Metas, reserva e dívidas</li>
+                  <li>Importar extrato do banco</li>
+                  <li>Sincronização em nuvem segura</li>
+                </ul>
+                <a href={APP} onClick={track} className="btn btn-g">Começar de graça</a>
+              </div>
+              <div className="plan pro">
+                <div className="nm"><span>Pro</span><span className="acc">7 dias grátis</span></div>
+                <div className="pr">{anual ? 'R$ 190' : 'R$ 19,90'}<small>{anual ? '/ ano' : '/ mês'}</small></div>
+                <div className="eq">{anual ? 'Equivale a R$ 15,83 por mês' : 'Cancele quando quiser'}</div>
+                <p className="desc">{anual ? 'Cobrado uma vez por ano, 20% abaixo do mensal. Sem fidelidade: cancele com um toque.' : 'Cobrado todo mês. Sem fidelidade: cancele com um toque, dentro do app.'}</p>
+                <ul>
+                  <li>Tudo do plano Grátis</li>
+                  <li>Voz sem limite e registro pelo WhatsApp</li>
+                  <li>Previsão completa e simulador de compras</li>
+                  <li>Orçamento por categoria e recorrentes ilimitadas</li>
+                  <li>Rachar conta e relatório mensal</li>
+                  <li>Calculadora de investimentos</li>
+                  <li>Assistente de IA e suporte prioritário</li>
+                </ul>
+                <a href={APP} onClick={track} className="btn btn-p">Testar o Pro por 7 dias <span className="ar">→</span></a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="faq" id="duvidas" aria-labelledby="faq-h">
+          <div className="wrap faq-grid">
+            <div>
+              <div className="eyebrow">Dúvidas</div>
+              <h2 className="sec-h" id="faq-h">Perguntas<br />comuns.</h2>
+              <p className="lead">Não achou? Escreva para <a className="link-u" href="mailto:contato@acueapp.com.br">contato@acueapp.com.br</a>.</p>
+            </div>
+            <div>
+              {FAQS.map((f) => (
+                <details key={f.q}>
+                  <summary>{f.q}<span className="pm" /></summary>
+                  <div className="ans">{f.a}</div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="cta" aria-labelledby="cta-h">
+          <div className="wrap">
+            <h2 id="cta-h">Seu dinheiro no seu controle.</h2>
+            <div className="row">
+              <p>Crie a conta em menos de um minuto. Sem cartão.</p>
+              <a href={APP} onClick={track} className="btn">Criar conta grátis <span>→</span></a>
+            </div>
+            <div className="peek" aria-hidden="true">
+              <div className="phone"><div className="scr"><img src="/telas/dados.webp" alt="" loading="lazy" /></div></div>
+              <div className="phone"><div className="scr"><img src="/telas/inicio.webp" alt="" loading="lazy" /></div></div>
+              <div className="phone"><div className="scr"><img src="/telas/previsao.webp" alt="" loading="lazy" /></div></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="foot">
+        <div className="wrap">
+          <div className="foot-grid">
+            <div>
+              <a href="/" className="brand"><Mark /> Acué</a>
+              <p className="slogan">Seu dinheiro no seu controle.</p>
+            </div>
+            <div>
+              <h4>Produto</h4>
+              <ul>
+                <li><a href="#como">Como funciona</a></li>
+                <li><a href="#recursos">Recursos</a></li>
+                <li><a href="#precos">Preços</a></li>
+                <li><a href="#duvidas">Dúvidas</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Acué</h4>
+              <ul>
+                <li><a href="/quem-faz">Quem faz o Acué</a></li>
+                <li><a href="/privacidade">Política de Privacidade</a></li>
+                <li><a href={APP_EXTRATO}>Ver meu mês sem cadastro</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Fale com a gente</h4>
+              <ul>
+                <li><a href="https://instagram.com/acueapp" rel="noopener" target="_blank">@acueapp</a></li>
+                <li><a href="mailto:contato@acueapp.com.br">contato@acueapp.com.br</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="legal"><span>© {new Date().getFullYear()} Acué</span><span>Feito no Brasil</span></div>
         </div>
+        <div className="word" aria-hidden="true">Acué</div>
       </footer>
     </div>
   );
