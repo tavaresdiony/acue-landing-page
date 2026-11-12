@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import QuemFaz from "./pages/QuemFaz";
 import Privacidade from "./pages/Privacidade";
+import GuiaPage, { GuiasIndexView } from "./pages/Guia";
 
 function Router() {
   return (
@@ -14,6 +15,8 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/privacidade" component={Privacidade} />
       <Route path="/quem-faz" component={QuemFaz} />
+      <Route path="/guias" component={GuiasIndexView} />
+      <Route path="/guias/:slug" component={GuiaPage} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
