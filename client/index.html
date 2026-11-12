@@ -6,18 +6,35 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Acué | Finanças Pessoais Simplificadas</title>    
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+    <title>Acué | Quanto posso gastar hoje? App de controle de gastos</title>
+    <meta name="description" content="O Acué mostra quanto você ainda pode gastar hoje, registra o gasto por voz ou pelo WhatsApp e prevê o fim do mês. Grátis, sem cartão, direto no navegador." />
+    <link rel="canonical" href="https://site.acueapp.com.br/" />
+    <meta name="theme-color" content="#0A0B0A" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Acué" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="Acué | Quanto posso gastar hoje?" />
+    <meta property="og:description" content="Um número só, todo dia: o quanto você ainda pode gastar. Registre por voz ou pelo WhatsApp. Grátis." />
+    <meta property="og:url" content="https://site.acueapp.com.br/" />
+    <meta property="og:image" content="https://site.acueapp.com.br/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Acué | Quanto posso gastar hoje?" />
+    <meta name="twitter:description" content="Um número só, todo dia: o quanto você ainda pode gastar. Registre por voz ou pelo WhatsApp." />
+    <meta name="twitter:image" content="https://site.acueapp.com.br/og.png" />
+    <link rel="icon" href="/logo-mark.png" type="image/png" />
+    <link rel="preload" href="/fonts/mukta-800.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/mukta-500.woff2" as="font" type="font/woff2" crossorigin />
+    <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Acué", "url": "https://site.acueapp.com.br/", "applicationCategory": "FinanceApplication", "operatingSystem": "Web, iOS, Android (PWA)", "inLanguage": "pt-BR", "description": "App de controle de gastos que mostra quanto você ainda pode gastar hoje, registra gastos por voz e pelo WhatsApp e prevê o fim do mês.", "offers": [{"@type": "Offer", "name": "Acué Grátis", "price": "0", "priceCurrency": "BRL"}, {"@type": "Offer", "name": "Acué Pro mensal", "price": "19.90", "priceCurrency": "BRL"}, {"@type": "Offer", "name": "Acué Pro anual", "price": "190.00", "priceCurrency": "BRL"}]}, {"@context": "https://schema.org", "@type": "Organization", "name": "Acué", "url": "https://site.acueapp.com.br/", "email": "contato@acueapp.com.br", "logo": "https://site.acueapp.com.br/logo-mark.png", "sameAs": ["https://instagram.com/acueapp"]}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "O Acué é seguro? Como meus dados são protegidos?", "acceptedAnswer": {"@type": "Answer", "text": "Privacidade é prioridade. Seus dados ficam sincronizados na nuvem de forma privada e só você acessa. O Acué não tem acesso ao seu dinheiro e não vende nem aluga dados pessoais."}}, {"@type": "Question", "name": "O Acué se conecta à minha conta bancária?", "acceptedAnswer": {"@type": "Answer", "text": "Não. Você registra os gastos por voz, por mensagem no WhatsApp ou importando o extrato do banco (OFX, CSV ou PDF com texto), e confere tudo antes de entrar."}}, {"@type": "Question", "name": "Como funciona o limite de gasto do dia?", "acceptedAnswer": {"@type": "Answer", "text": "O Acué pega seu saldo, desconta as contas pendentes e a reserva do mês e divide pelos dias que faltam. O resultado é quanto você ainda pode gastar hoje."}}, {"@type": "Question", "name": "Preciso baixar na loja de aplicativos?", "acceptedAnswer": {"@type": "Answer", "text": "Não. O Acué é um PWA: abre no navegador e pode ser adicionado à tela inicial do celular."}}, {"@type": "Question", "name": "Como cancelo o Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Sem fidelidade, dentro do app em Perfil, Gerenciar assinatura, ou por contato@acueapp.com.br."}}]}]</script>
 
     <!-- Tela de carregamento estática: usa só HTML/CSS inline (não depende do
     bundle JS nem da fonte externa), pra nunca deixar a tela em branco/preta
     sem explicação numa conexão lenta. O React substitui isso assim que monta. -->
     <style>
-      #root{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0B0C0E}
+      #root{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0A0B0A}
       .acue-boot{display:flex;flex-direction:column;align-items:center;gap:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-      .acue-boot__ring{width:36px;height:36px;border-radius:50%;border:3px solid #22252A;border-top-color:#00E676;animation:acue-spin .8s linear infinite}
+      .acue-boot__ring{width:36px;height:36px;border-radius:50%;border:3px solid #22252A;border-top-color:#00E5A0;animation:acue-spin .8s linear infinite}
       .acue-boot__label{color:#8b93a1;font-size:13px;letter-spacing:.02em}
       @keyframes acue-spin{to{transform:rotate(360deg)}}
     </style>
