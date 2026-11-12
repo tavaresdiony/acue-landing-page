@@ -471,6 +471,9 @@ export default function Home() {
                   </span>
                   <span className="text-xs text-gray-500">/ mês</span>
                 </div>
+                <p className="text-xs text-gray-400 -mt-3">
+                  ou <strong className="text-white">R$ 190,00 por ano</strong> (equivale a R$ 15,83/mês, cerca de 20% de desconto). A oferta anual aparece no app ao fim dos 7 dias de teste.
+                </p>
                 <div className="h-[1px] bg-white/5"></div>
                 <ul className="space-y-3 text-xs text-gray-300">
                   <li className="flex items-center gap-2">
