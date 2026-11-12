@@ -23,6 +23,7 @@ function trackAppClick() {
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [planoAnual, setPlanoAnual] = useState(false);
 
   const faqs = [
     {
@@ -465,15 +466,44 @@ export default function Home() {
                   <h3 className="text-lg font-bold font-sora text-[#00E676]">Acué PRO</h3>
                   <p className="text-xs text-gray-400 mt-1">Para quem quer o Acué fazendo o trabalho pesado: voz sem limite, previsão e relatórios.</p>
                 </div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold font-sora">
-                    R$ 19,90
-                  </span>
-                  <span className="text-xs text-gray-500">/ mês</span>
+                {/* Seletor mensal / anual */}
+                <div role="tablist" aria-label="Periodicidade do plano" className="relative grid grid-cols-2 p-1 rounded-full bg-white/5 border border-white/10 text-xs font-bold">
+                  <div
+                    aria-hidden="true"
+                    className={`absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-[#00E676] shadow-[0_0_15px_rgba(0,230,118,0.3)] transition-transform duration-300 ease-out ${planoAnual ? 'translate-x-full' : 'translate-x-0'}`}
+                  />
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={!planoAnual}
+                    onClick={() => setPlanoAnual(false)}
+                    className={`relative z-10 py-2 rounded-full transition-colors ${!planoAnual ? 'text-black' : 'text-gray-400 hover:text-white'}`}
+                  >
+                    Mensal
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={planoAnual}
+                    onClick={() => setPlanoAnual(true)}
+                    className={`relative z-10 py-2 rounded-full transition-colors ${planoAnual ? 'text-black' : 'text-gray-400 hover:text-white'}`}
+                  >
+                    Anual <span className={planoAnual ? 'text-black/70' : 'text-[#00E676]'}>-20%</span>
+                  </button>
                 </div>
-                <p className="text-xs text-gray-400 -mt-3">
-                  ou <strong className="text-white">R$ 190,00 por ano</strong> (equivale a R$ 15,83/mês, cerca de 20% de desconto). A oferta anual aparece no app ao fim dos 7 dias de teste.
-                </p>
+                <div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-extrabold font-sora">
+                      {planoAnual ? 'R$ 190,00' : 'R$ 19,90'}
+                    </span>
+                    <span className="text-xs text-gray-500">{planoAnual ? '/ ano' : '/ mês'}</span>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2 min-h-[2.5rem]">
+                    {planoAnual
+                      ? 'Equivale a R$ 15,83 por mês, cerca de 20% de desconto frente a 12 mensalidades (R$ 238,80). Cobrado uma vez por ano.'
+                      : 'Cobrado todo mês. Cancele quando quiser, sem fidelidade.'}
+                  </p>
+                </div>
                 <div className="h-[1px] bg-white/5"></div>
                 <ul className="space-y-3 text-xs text-gray-300">
                   <li className="flex items-center gap-2">
