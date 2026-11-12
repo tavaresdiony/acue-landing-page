@@ -38,6 +38,21 @@ const secoes: { titulo: string; paragrafos: string[] }[] = [
     ],
   },
   {
+    titulo: 'Login com Google',
+    paragrafos: [
+      'No app você pode criar conta ou entrar com a sua conta Google. Nesse caso recebemos do Google apenas o seu nome, o e-mail (que precisa estar verificado) e um identificador da conta, usados para criar e reconhecer o seu perfil no Acué.',
+      'Não recebemos a sua senha do Google e não acessamos seus e-mails, contatos, arquivos nem outros dados da conta Google. O login com Google é opcional: dá para usar só usuário e senha.',
+    ],
+  },
+  {
+    titulo: 'Registro de gastos por WhatsApp (Pro)',
+    paragrafos: [
+      'É um recurso opcional do plano Pro. Só funciona depois que você vincula o seu WhatsApp ao app, enviando para o número do Acué um código gerado por você em Configurações. A partir daí, as mensagens enviadas desse número são associadas à sua conta.',
+      'As mensagens passam pelo WhatsApp e pela Meta, que as processa conforme a política de privacidade do WhatsApp. Para registrar o seu lançamento, recebemos o número de WhatsApp vinculado e o texto ou o áudio da mensagem. O áudio é baixado apenas para ser transcrito em texto (pelo Whisper, da Groq) e não é guardado. O texto é interpretado por IA para identificar valor, data e categoria.',
+      'Guardamos o vínculo entre o seu número e a sua conta e os lançamentos recebidos (valor, descrição, categoria e data) até o app registrá-los. Você pode desfazer um lançamento respondendo DESFAZER e pode desvincular o WhatsApp quando quiser em Configurações; depois disso, as mensagens do número deixam de ser associadas à sua conta. Para pedir a exclusão desses dados, escreva para contato@acueapp.com.br.',
+    ],
+  },
+  {
     titulo: 'Seus direitos (LGPD)',
     paragrafos: [
       'Você tem direito a acessar, corrigir e excluir seus dados a qualquer momento. Ao solicitar a exclusão da conta, seus dados financeiros são marcados como excluídos e removidos permanentemente em até 30 dias. Você também pode pedir a exclusão dos dados de navegação e das gravações de tela.',
@@ -73,7 +88,7 @@ export default function Privacidade() {
 
       <main className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-3xl md:text-4xl font-extrabold font-sora mb-2">Política de Privacidade</h1>
-        <p className="text-sm text-gray-500 mb-10">Última atualização: 5 de novembro de 2026</p>
+        <p className="text-sm text-gray-500 mb-10">Última atualização: 11 de novembro de 2026</p>
 
         <div className="space-y-9">
           {secoes.map((s) => (
