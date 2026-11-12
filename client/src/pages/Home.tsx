@@ -502,6 +502,7 @@ export default function Home() {
             <div>
               <h4>Acué</h4>
               <ul>
+                <li><a href="/guias">Guias de dinheiro</a></li>
                 <li><a href="/quem-faz">Quem faz o Acué</a></li>
                 <li><a href="/privacidade">Política de Privacidade</a></li>
                 <li><a href={APP_EXTRATO}>Ver meu mês sem cadastro</a></li>

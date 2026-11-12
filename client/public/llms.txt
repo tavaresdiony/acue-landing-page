@@ -4,6 +4,11 @@
 
 ## Páginas
 - [Início](https://site.acueapp.com.br/): o que é o Acué, como funciona, planos e perguntas frequentes
+- [Guias de dinheiro](https://site.acueapp.com.br/guias): índice dos guias
+- [como calcular o limite diário de gastos](https://site.acueapp.com.br/guias/quanto-posso-gastar-por-dia)
+- [como montar a reserva de emergência com renda baixa](https://site.acueapp.com.br/guias/reserva-de-emergencia-ganhando-pouco)
+- [como controlar gastos sem planilha](https://site.acueapp.com.br/guias/controlar-gastos-sem-planilha)
+- [como importar o extrato do banco (OFX, CSV, PDF)](https://site.acueapp.com.br/guias/importar-extrato-do-banco-para-controlar-gastos)
 - [Quem faz o Acué](https://site.acueapp.com.br/quem-faz): por que o app existe e como falar com o fundador
 - [Política de Privacidade](https://site.acueapp.com.br/privacidade): como os dados são tratados
 
