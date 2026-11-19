@@ -26,7 +26,7 @@ const secoes: { titulo: string; paragrafos: string[] }[] = [
   {
     titulo: 'Cadastro e uso do app',
     paragrafos: [
-      'Ao criar uma conta no app, coletamos: nome, nome de usuário, e-mail, senha (armazenada como hash criptográfico), dados financeiros inseridos por você (gastos, receitas, metas) e informações do dispositivo para suporte técnico.',
+      'Ao criar uma conta no app, coletamos: nome, nome de usuário, e-mail, senha (armazenada como hash criptográfico), dados financeiros inseridos por você (gastos, receitas, metas) e informações do dispositivo para suporte técnico. Ao criar a conta, também guardamos de onde você veio (por exemplo, a busca do Google, um anúncio ou um link): apenas o nome do site ou da campanha e a página de entrada, para sabermos quais canais funcionam. Não guardamos seu IP, sua localização nem o endereço completo que você visitou.',
       'Os dados são armazenados de forma segura no Supabase, em servidores localizados no Brasil, com criptografia em trânsito (TLS) e em repouso. Não vendemos nem alugamos dados pessoais, e não rastreamos informações financeiras individuais para análise de uso.',
     ],
   },
@@ -88,7 +88,7 @@ export default function Privacidade() {
 
       <main className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-3xl md:text-4xl font-extrabold  mb-2">Política de Privacidade</h1>
-        <p className="text-sm text-gray-500 mb-10">Última atualização: 12 de novembro de 2026</p>
+        <p className="text-sm text-gray-500 mb-10">Última atualização: 18 de novembro de 2026</p>
 
         <div className="space-y-9">
           {secoes.map((s) => (
